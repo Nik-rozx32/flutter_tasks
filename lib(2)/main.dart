@@ -9,7 +9,6 @@ void callBackDispatcher() {
     return Future.value(true);
   });
 }
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
