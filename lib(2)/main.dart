@@ -6,9 +6,11 @@ const taskName = "Simple Task";
 void callBackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     print("Background Task:$task");
+    print("Received Data: ${inputData?['message']}");
     return Future.value(true);
   });
 }
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -31,11 +33,22 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _log = "No task run yet";
+
   void _startBgTask() {
-    Workmanager().registerOneOffTask("uniqueName", taskName);
+    Workmanager().registerOneOffTask("uniqueName", taskName,
+        inputData: {"message": "Hello from foreground"});
+    setState(() {
+      _log = "Task registered. Check logs or background output.";
+    });
   }
 
   @override
@@ -43,7 +56,14 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('BG Processing')),
       body: Center(
-        child: ElevatedButton(onPressed: _startBgTask, child: Text('Run Task')),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(onPressed: _startBgTask, child: Text('Run Task')),
+            SizedBox(height: 20),
+            Text(_log),
+          ],
+        ),
       ),
     );
   }
