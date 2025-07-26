@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-int runTask(List<dynamic> args) {
+void runTask(List<dynamic> args) {
   SendPort resultPort = args[0];
   int value = 0;
   for (int i = 0; i < args[1]; i++) {
